@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace BFS_DFS
 {
@@ -13,13 +14,14 @@ namespace BFS_DFS
         private Queue q;
 
         // should write out 1, 2, 3, 4, 5, 6
-        internal void Traverse<T>(Node<T> tree) where T : struct
+        internal IEnumerable<T> Traverse<T>(Node<T> tree) where T : struct
         {
             q.Enqueue(tree);
-            BFS(tree);
+            foreach (T node in BFS(tree))
+                yield return node;
         }
 
-        private void BFS<T>(Node<T> tree) where T : struct
+        private IEnumerable<T> BFS<T>(Node<T> tree) where T : struct
         {
             foreach(var child in tree.Children)
             {
@@ -27,12 +29,13 @@ namespace BFS_DFS
             }
             foreach(var child in tree.Children)
             {
-                BFS(child);
+                foreach (var node in BFS(child))
+                    yield return node;
             }
             while (q.Count > 0)
             {
                 Node<T> node = q.Dequeue() as Node<T>;
-                Console.WriteLine(node.Value);
+                yield return node.Value;
             }
         }
     }

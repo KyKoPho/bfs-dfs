@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BFS_DFS
 {
@@ -9,12 +10,13 @@ namespace BFS_DFS
         }
 
         // should write out 1, 2, 4, 5, 6, 3
-        internal void Traverse<T>(Node<T> tree) where T : struct
+        internal IEnumerable<T> Traverse<T>(Node<T> tree) where T : struct
         {
-            Console.WriteLine(tree.Value);
+            yield return tree.Value;
             foreach (var child in tree.Children)
             {
-                Traverse(child);
+                foreach (var node in Traverse(child))
+                    yield return node;
             }
         }
     }
